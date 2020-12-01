@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Knotical</title>
+    <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{% static "assets/css/main.css" %}" />
+    <noscript><link rel="stylesheet" href="{% static "assets/css/noscript.css" %}" /></noscript>
+  </head>
+  <body class="is-preload">
+    <div id="wrapper" class="fade-in">
+        <!-- Header -->
+          <header id="header">
+            <a href="{% url 'interface:index' %}" class="logo">Knotical</a>
+          </header>
+        <!-- Nav -->
+          <nav id="nav">
+            <ul class="links">
+                <li><a href="{% url 'interface:index' %}">Home</a></li>
+                {# Some logic on what to display for last item #}
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'taskmanager:topics' %}">Topics</a></li>
+                    <li><a href="{% url 'taskmanager:tasks_index' %}">Knots</a></li>
+                    <li><a href="{% url 'usermanagement:user_logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'usermanagement:user_login' %}">Login</a></li>
+                    <li><a href="{% url 'usermanagement:register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+      		</nav>
+        <!-- main body -->
+          <div id="main">
+              {% block body_block %}
+              {% endblock %}
+          </div>
+
+        <!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Ghazi Farooq</li><li> <a href="mailto:mail@ghazif.com">mail@ghazif.com</a></li></ul>
+					</div>
+    </div>
+  <!-- Scripts -->
+  <script src="{% static "assets/js/jquery.min.js"  %}"></script>
+  <script src="{% static "assets/js/jquery.scrollex.min.js"  %}"></script>
+  <script src="{% static "assets/js/jquery.scrolly.min.js"  %}"></script>
+  <script src="{% static "assets/js/browser.min.js"  %}"></script>
+  <script src="{% static "assets/js/breakpoints.min.js"  %}"></script>
+  <script src="{% static "assets/js/util.js"  %}"></script>
+  <script src="{% static "assets/js/main.js"  %}"></script>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+{% extends "interface/base.html" %}
+{% block body_block %}
+
+<section id="three" class="wrapper style1 fade-up">
+  <div class="inner">
+    <h1>Knots</h1>
+  </div>
+</section>
+    {% if user.is_authenticated %}
+            <!-- was a task deleted or completed -->
+            {% if knot_unraveled %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You unraveled a knot!</h3>
+                  </div>
+              </section>
+            {% endif %}
+
+            <!-- was a topic created? -->
+            {% if knot_tied %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You tied a new knot!</h3>
+                </div>
+            </section>
+            {% endif %}
+
+          <!-- section to view details -->
+
+          {% if knot_details %}
+            <h2>knot details</h2>
+              <ul>
+                <li>{{ task_details_query }}</li>
+                <li>{{task_details_query.knot_topic}}</li>
+                <li>{{task_details_query.knot_category}}</li>
+                <li>{{task_details_query.knot_status}}</li>
+                <li>{{task_details_query.knot_urgency}}</li>
+                <li>{{task_details_query.knot_detils}}</li>
+                <li>{{task_details_query.knot_url}}</li>
+                <li>{{task_details_query.knot_date}}</li>
+                <li>{{task_details_query.knot_time}}</li>
+                <!-- to avoid errors, lets check if an image has been defined for this task -->
+                {% if task_details_query.knot_image %}
+                    <li><img src="{{task_details_query.knot_image.url}}"></li>
+                {% endif %}
+              </ul>
+          {% endif %}
+
+
+            <section class="wrapper style2 spotlights">
+              <section>
+                <div class="content">
+                  <div class="inner">
+                        <!-- add topic form -->
+                        <form enctype="multipart/form-data" method="POST">
+                            <div class="fields">
+                              <div class="field">
+                                {% csrf_token %}
+                                {{ create_topic_form.knot_topic}}
+                              </div>
+                            </div>
+                            <input type="hidden" name="topic_to_add" id ="topic_to_add" value="topic_to_add">
+                            <a href="#" class="button submit icon solid fa-save">Open Topic</a>
+                        </form>
+                  </div>
+                </div>
+              </section>
+            </section>
+
+          <!-- section view knot list  -->
+            <section id="two" class="wrapper style3 fade-up">
+              <div class="inner">
+                <h2>Knots to Untie</h2>
+                <div class="row">
+                      <table>
+                            {% for knot in task_list_query %}
+                                      <tr>
+                                          <td>
+                                              <h4>{{ knot }}</h4>
+                                          </td>
+                                          <td>
+                                            <form class=""method="post">
+                                                {% csrf_token %}
+                                                <input type="submit" name = "topic_to_view" id="topic_to_view" value="{{knot.knot_topic}}">
+                                            </form>
+                                          </td>
+                                          <td>
+                                            {{knot.knot_category}}
+                                          </td>
+                                          <td>
+                                            {{knot.knot_status}}
+                                          </td>
+                                          <td>
+                                            {{knot.knot_urgency}}
+                                          </td>
+                                          <td>
+                                              <form class=""method="post">
+                                                {% csrf_token %}
+                                                <!-- add a button to delete topic -->
+                                                <input type="hidden" name = "knot_to_unravel" id="knot_to_unravel" value="{{knot}}">
+                                                <a href="#" class="button submit icon solid fa-trash-alt">Unravel</a>
+                                              </form>
+                                          </td>
+                                          <td>
+                                              <form class=""method="post">
+                                                {% csrf_token %}
+                                                <!-- add a button to delete topic -->
+                                                <input type="hidden" name = "knot_to_detail" id="knot_to_detail" value="{{knot}}">
+                                                <a href="#" class="button submit icon solid fa-eye">details</a>
+                                              </form>
+                                          </td>
+                                      </tr>
+                            {% endfor %}
+                        </table>
+                  </div>
+              </div>
+            </section>
+
+            <!-- section to add knot -->
+            <section class="wrapper style2 spotlights">
+              <section>
+                <div class="content">
+                  <div class="inner">
+                    <h2>Tie a Knot</h2>
+                        <!-- add topic form -->
+                        <form enctype="multipart/form-data" method="POST">
+                          {% csrf_token %}
+                          {{ create_knot_form.as_p }}
+                          <input type="hidden" name="knot_to_tie" id = "knot_to_tie" value="Tie Knot">
+                          <a href="#" class="button submit icon solid fa-save">Tie Knot</a>
+                        </form>
+                  </div>
+                </div>
+              </section>
+            </section>
+    <!-- if not authenticated -->
+    {% else %}
+              <section class="wrapper style2 spotlights">
+                <section>
+                  <div class="content">
+                    <div class="inner">
+                      <h3>Please login to access this page!</h3>
+                    </div>
+                  </div>
+                </section>
+              </section>
+    {% endif %}
+
+
+{% endblock %}

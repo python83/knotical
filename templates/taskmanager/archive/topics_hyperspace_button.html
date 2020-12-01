@@ -1,0 +1,40 @@
+{% extends "interface/base.html" %}
+{% block body_block %}
+<!-- add topic form -->
+
+
+<section id="one" class="wrapper style2 spotlights">
+  <div class="inner">
+    <h2>Topics</h2>
+          {% if user.is_authenticated %}
+                <!-- was a topic deleted? -->
+                {% if topic_deleted %}
+                  <h3>topic deleted</h3>
+                {% endif %}
+
+                <!-- was a topic added? -->
+                {% if topic_added %}
+                  <h3>new topic created</h3>
+                {% endif %}
+
+          <!-- show updated list of topics -->
+            {% for topic in topics_list_query %}
+                      <section>
+                        <div class="content">
+                          <div class="inner">
+                            <h2>{{topic}}</h2>
+                              <form class=""method="post">
+                                  {% csrf_token %}
+                                  <!-- add a button to delete topic -->
+                                  <input type="hidden" name = "topic_to_delete" id="topic_to_delete" value="{{topic}}">
+                                  <input class = "button" type="submit" name="" value="x">
+                              </form>
+                          </div>
+                        </div>
+                      </section>
+            {% endfor %}
+        {% else %}
+          <h3>please login to access this page</h3>
+        {% endif %}
+    </section>
+{% endblock %}

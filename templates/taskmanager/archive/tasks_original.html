@@ -1,0 +1,89 @@
+{% extends "interface/base.html" %}
+{% block body_block %}
+      {% if user.is_authenticated %}
+          <h1>Knots</h1>
+
+          <!-- was a topic deleted? -->
+          {% if knot_unraveled %}
+            <h2>a knot has been unraveled</h2>
+          {% endif %}
+
+          <!-- was a topic added? -->
+          {% if knot_tied %}
+            <h2>new knot tied</h2>
+          {% endif %}
+
+          <!-- details of selected knot -->
+          {% if knot_details %}
+            <h2>knot details</h2>
+              <ul>
+                <li>{{ task_details_query }}</li>
+                <li>{{task_details_query.knot_topic}}</li>
+                <li>{{task_details_query.knot_category}}</li>
+                <li>{{task_details_query.knot_status}}</li>
+                <li>{{task_details_query.knot_urgency}}</li>
+                <li>{{task_details_query.knot_detils}}</li>
+                <li>{{task_details_query.knot_url}}</li>
+                <li>{{task_details_query.knot_date}}</li>
+                <li>{{task_details_query.knot_time}}</li>
+                <!-- to avoid errors, lets check if an image has been defined for this task -->
+                {% if task_details_query.knot_image %}
+                    <li><img src="{{task_details_query.knot_image.url}}"></li>
+                {% endif %}
+              </ul>
+
+          {% endif %}
+
+          <!-- show updated list of knots -->
+          <h2>knots to untie</h2>
+          <table>
+            {% for knot in task_list_query %}
+                <tr>
+                    <td>{{ knot }}</td>
+                    <td>
+                      <form class=""method="post">
+                          {% csrf_token %}
+                          <input type="submit" name = "topic_to_view" id="topic_to_view" value="{{knot.knot_topic}}">
+                      </form>
+                    </td>
+                    <td>
+                      {{knot.knot_category}}
+                    </td>
+                    <td>
+                      {{knot.knot_status}}
+                    </td>
+                    <td>
+                      {{knot.knot_urgency}}
+                    </td>
+                    <td>
+                      <form class=""method="post">
+                        {% csrf_token %}
+                        <!-- add a button to delete topic -->
+                        <input type="hidden" name = "knot_to_unravel" id="knot_to_unravel" value="{{knot}}">
+                        <input type="submit" name="" value="x">
+                      </form>
+                    </td>
+                    <td>
+                      <form class=""method="post">
+                      {% csrf_token %}
+                      <!-- add a button to delete topic -->
+                      <input type="hidden" name = "knot_to_detail" id="knot_to_detail" value="{{knot}}">
+                      <input type="submit" name="" value="details"></form>
+                    </td>
+                </tr>
+            {% endfor %}
+          </table>
+
+
+          <!-- create knot form -->
+          <h2>tie a new knot</h2>
+          <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {{ create_knot_form.as_p }}
+            <input type="submit" name="knot_to_tie" id = "knot_to_tie" value="Tie Knot">
+          </form>
+
+      {% else %}
+        please login to access this page
+      {% endif %}
+{% endblock %}

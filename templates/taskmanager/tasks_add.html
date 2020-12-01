@@ -1,0 +1,50 @@
+<!-- Add a task -->
+{% extends "interface/base.html" %}
+{% block body_block %}
+  <section id="three" class="wrapper style1 fade-up">
+    <div class="inner">
+      <h1>Tie Knots</h1>
+    </div>
+  </section>
+  {% if user.is_authenticated %}
+
+      <!-- was a topic created? -->
+      {% if knot_tied %}
+      <section id="main" class="wrapper">
+				<div class="inner">
+                    <h3>You tied a new knot!</h3>
+          </div>
+      </section>
+      {% endif %}
+
+      <!-- section to add knot -->
+      <section class="wrapper style2 spotlights">
+        <section>
+          <div class="content">
+            <div class="inner">
+                  <!-- add topic form -->
+                  <form enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <!--  keep it simple and use the available tag to display a form -->
+                    {{ create_knot_form.as_p }}
+                    <input type="hidden" name="knot_to_tie" id = "knot_to_tie" value="Tie Knot">
+                    <a href="#" class="button submit icon solid fa-save">Tie Knot</a>
+                  </form>
+            </div>
+          </div>
+        </section>
+      </section>
+
+  <!-- if not authenticated -->
+  {% else %}
+      <section class="wrapper style2 spotlights">
+        <section>
+          <div class="content">
+            <div class="inner">
+              <h3>Please login to access this page!</h3>
+            </div>
+          </div>
+        </section>
+      </section>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "interface/base.html" %}
+{% block body_block %}
+  <!-- Intro -->
+  <section id="intro" class="wrapper style1 fullscreen fade-up">
+    <div class="inner">
+      <h1>Knotical</h1>
+      {% if user.is_authenticated %}
+          <p>Hello {{ user.username }}!
+      {% else %}
+        <p>In days gone by, gentlemen would tie a knot in their handkerchief to remind themselves there is something that should not be forgotten. Whenever they reached for their handkerchief, they would be reminded.</p>
+        <p>My grandmother also used to practice this. However more often than not, the knot would remind her that there is something important to remember, but she could never actually recall what was it that she was supposed to remember. That was more frustrating than forgetting about the whole thing in the first place</p>
+        <p>Inspired by this old tradition of tying knots, I have developed this basic todo/project-management/tracker app for personal use. I am usually working on multiple personal projects and needed a quick and easy way to keep track of things I am supposed to get done.</p>
+      {% endif %}
+      <ul class="actions">
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'taskmanager:topics' %}" class="button scrolly">topics</a></li>
+            <li><a href="{% url 'taskmanager:tasks_index' %}" class="button scrolly">knots</a></li>
+        {% else %}
+            <li><a href="{% url 'usermanagement:user_login' %}" class="button scrolly">login</a></li>
+            <li><a href="{% url 'usermanagement:register' %}" class="button scrolly">register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </section>
+{% endblock %}

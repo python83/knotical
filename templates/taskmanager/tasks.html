@@ -1,0 +1,169 @@
+td{% extends "interface/base.html" %}
+{% block body_block %}
+  <section id="three" class="wrapper style1 fade-up">
+    <div class="inner">
+      <h1>Knots</h1>
+    </div>
+  </section>
+  {% if user.is_authenticated %}
+            <!-- was a task deleted or completed -->
+            {% if knot_unraveled %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You unraveled a knot!</h3>
+                  </div>
+              </section>
+            {% endif %}
+
+            <!-- was a topic created? -->
+            {% if knot_tied %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You tied a new knot!</h3>
+                </div>
+            </section>
+            {% endif %}
+
+          <!-- section to view details -->
+          {% if knot_details %}
+                  <section class="wrapper style3 spotlights">
+                      <section>
+                        <div class="content">
+                          <div class="inner">
+                            <pre><code>
+<h3>{{ task_details_query }}</h3>
+Topic: {{task_details_query.knot_topic}}
+Category: {{task_details_query.knot_category}}
+Status: {{task_details_query.knot_status}}
+Urgency: {{task_details_query.knot_urgency}}
+URL: {{task_details_query.knot_url}}
+Date: {{task_details_query.knot_date}}
+Time: {{task_details_query.knot_time}}
+{{task_details_query.knot_details}}
+<!-- to avoid errors, lets check if an image has been defined for this task -->
+{% if task_details_query.knot_image %}
+  <div class="col-12"><span class="image fit"><img src="{{task_details_query.knot_image.url}}" alt="" /></span></div>
+{% endif %}</code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </section>
+            {% endif %}
+
+          <!-- section view knot list  -->
+
+          <section id="two" class="wrapper style2 fade-up">
+            <div class="inner">
+              <h2>Summary</h2>
+              <div class="row">
+                    <table>
+                          {% for knot in task_list_query %}
+                                    <tr>
+                                      <td>{{ knot }}</td>
+
+                                          <!-- category -->
+                                          {% if knot.knot_category.category_name == "development" %}
+                                              <td><a href="#" class="icon solid major fa-code"><span class="label">development</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_category.category_name == "chores" %}
+                                              <td><a href="#" class="icon solid major fa-tools"><span class="label">chores</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_category.category_name == "research" %}
+                                              <td><a href="#" class="icon solid major fa-search"><span class="label">research</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_category.category_name == "misc" %}
+                                              <td><a href="#" class="icon solid major fa-random"><span class="label">misc</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_category.category_name == "work" %}
+                                              <td><a href="#" class="icon solid major fa-briefcase"><span class="label">work</span></a></td>
+                                          {% endif %}
+
+                                          <!-- status -->
+                                          {% if knot.knot_status.status_name == "resolved" %}
+                                              <td><a href="#" class="icon solid major fa-thumbs-up"><span class="label">Resolved</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_status.status_name  == "blocked" %}
+                                              <td><a href="#" class="icon solid major fa-door-closed"><span class="label">Blocked</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_status.status_name  == "paused" %}
+                                              <td><a href="#" class="icon solid major fa-pause"><span class="label">Paused</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_status.status_name  == "in progress" %}
+                                              <td><a href="#" class="icon solid major fa-chart-line"><span class="label">In Progress</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_status.status_name  == "new" %}
+                                              <td><a href="#" class="icon solid major fa-spinner"><span class="label">New</span></a></td>
+                                          {% endif %}
+
+                                          <!-- urgency -->
+                                          {% if knot.knot_urgency.urgency_title == "some day" %}
+                                              <td><a href="#" class="icon solid major fa-bed"><span class="label">Some Day</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_urgency.urgency_title  == "can wait" %}
+                                              <td><a href="#" class="icon solid major fa-calendar-plus"><span class="label">Can Wait</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_urgency.urgency_title  == "soon" %}
+                                              <td><a href="#" class="icon solid major fa-clock"><span class="label">Soon</span></a></td>
+                                          {% endif %}
+                                          {% if knot.knot_urgency.urgency_title  == "immediate" %}
+                                              <td><a href="#" class="icon solid major fa-stopwatch"><span class="label">Immediate</span></a></td>
+                                          {% endif %}
+
+
+
+                                              <td>
+                                                  <form class=""method="post">
+                                                    {% csrf_token %}
+                                                    <!-- add a button to delete topic -->
+                                                    <input type="hidden" name = "knot_to_detail" id="knot_to_detail" value="{{knot}}">
+                                                    <a href="#" class="button submit icon solid fa-eye"></a>
+                                                  </form>
+                                              </td>
+                                              <td>
+                                                  <form class=""method="post">
+                                                    {% csrf_token %}
+                                                    <!-- add a button to delete topic -->
+                                                    <input type="hidden" name = "knot_to_edit" id="knot_to_edit" value="{{knot}}">
+                                                    <a href="#" class="button submit icon solid fa-edit"></a>
+                                                  </form>
+                                              </td>
+                                              <td>
+                                                  <form class=""method="post">
+                                                    {% csrf_token %}
+                                                    <!-- add a button to delete topic -->
+                                                    <input type="hidden" name = "knot_to_unravel" id="knot_to_unravel" value="{{knot}}">
+                                                    <a href="#" class="button submit icon solid fa-trash-alt"></a>
+                                                  </form>
+                                              </td>
+                                              {% if knot.knot_topic %}
+                                                    <td>
+                                                      <form class=""method="post">
+                                                          {% csrf_token %}
+                                                          <input type="hidden" name = "topic_to_view" id="topic_to_view" value="{{knot.knot_topic}}">
+                                                          <a href="#" class="button submit icon solid fa-filter">{{knot.knot_topic}}</a>
+                                                      </form>
+                                                    </td>
+                                              {% else %}
+                                                <td></td>
+                                              {% endif %}
+                                    </tr>
+                          {% endfor %}
+                      </table>
+                </div>
+            </div>
+          </section>
+
+    <!-- if not authenticated -->
+  {% else %}
+            <section class="wrapper style2 spotlights">
+              <section>
+                <div class="content">
+                  <div class="inner">
+                    <h3>Please login to access this page!</h3>
+                  </div>
+                </div>
+              </section>
+            </section>
+  {% endif %}
+{% endblock %}

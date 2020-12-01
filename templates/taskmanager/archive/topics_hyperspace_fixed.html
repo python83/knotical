@@ -1,0 +1,108 @@
+{% extends "interface/base.html" %}
+{% block body_block %}
+
+<section id="three" class="wrapper style1 fade-up">
+  <div class="inner">
+    <h1>Topics</h1>
+  </div>
+</section>
+{% if user.is_authenticated %}
+            <!-- was a topic added? -->
+            {% if topic_added %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You opened a new topic!</h3>
+                  </div>
+              </section>
+            {% endif %}
+
+            <!-- was a topic added? -->
+            {% if topic_deleted %}
+            <section id="main" class="wrapper">
+  						<div class="inner">
+                          <h3>You closed a topic!</h3>
+                </div>
+            </section>
+            {% endif %}
+<!-- section to add topic -->
+            <section class="wrapper style2 spotlights">
+              <section>
+                <div class="content">
+                  <div class="inner">
+                        <!-- was a topic added? -->
+                        {% if topic_added %}
+                          <h3>new topic created</h3>
+                        {% endif %}
+
+                        {% if topic_deleted %}
+                          <h3>topic deleted</h3>
+                        {% endif %}
+                        <!-- add topic form -->
+                        <form enctype="multipart/form-data" method="POST">
+                            <div class="fields">
+                              <div class="field">
+                                {% csrf_token %}
+                                {{ create_topic_form.knot_topic}}
+                              </div>
+                            </div>
+                            <input class="button" type="submit" name="topic_to_add" id = "topic_to_add" value="open topic">
+
+                        </form>
+
+
+
+                  </div>
+                </div>
+              </section>
+            </section>
+
+
+<!-- section to view current topics -->
+            <section class="wrapper style3 spotlights">
+              <section>
+                <div class="content">
+                  <div class="inner">
+                        <div class="table-wrapper" >
+                                <table >
+                                  <thead>
+                                      <tr valign="center">
+                                        <th style="text-align:center">Open Topics</th>
+                                        <th style="text-align:center">Actions</th>
+                                      </tr>
+                                  </thead>
+                                  {% for topic in topics_list_query %}
+                                      <tr valign="center">
+                                        <td style="text-align:center">
+                                            {{ topic }}
+                                        </td>
+                                        <td style="text-align:center">
+                                            <form class=""method="post">
+                                            {% csrf_token %}
+                                            <!-- add a button to delete topic -->
+                                            <input type="hidden" name = "topic_to_delete" id="topic_to_delete" value="{{topic}}">
+                                            <input class = "button small" type="submit" name="" value="Close Topic"></form>
+                                        </td>
+                                      </tr>
+                                  {% endfor %}
+                                </table>
+                        </div>
+                  </div>
+                </div>
+              </section>
+            </section>
+
+<!-- if not authenticated -->
+  {% else %}
+              <section class="wrapper style2 spotlights">
+                <section>
+                  <div class="content">
+                    <div class="inner">
+                      <h3>Please login to access this page!</h3>
+                    </div>
+                  </div>
+                </section>
+              </section>
+  {% endif %}
+
+
+{% endblock %}

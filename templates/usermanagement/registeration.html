@@ -1,0 +1,51 @@
+
+{% extends "interface/base.html" %}
+{% block body_block %}
+    <section id="three" class="wrapper style1 fade-up">
+      <div class="inner">
+        <h1>Register</h1>
+        <div class="split style1">
+          <section>
+                {% if registered %}
+                        <h2>Thank you for registering!</h2>
+                        <ul class="actions">
+                            <li><a href="{% url 'usermanagement:user_login' %}" class="button scrolly">login</a></li>
+                        </ul>
+                {% else %}
+
+                        {% if user.is_authenticated %}
+                                    <h2>You are logged in! </h2>
+                        {% else %}
+                                    <h2>Sign up and start tying knots!</h2>
+                                    <form method="post" action="{% url 'usermanagement:register' %}">
+                                      <div class="fields">
+                                          {% csrf_token %}
+                                          <div class="field">
+                                              <label for="username">Username</label>
+                                              {{ user_form.username}}
+                                          </div>
+                                          <div class="field">
+                                              <label for="email">Email</label>
+                                              {{ user_form.email }}
+                                          </div>
+                                          <div class="field">
+                                              <label for="password">Password</label>
+                                              {{ user_form.password }}
+                                          </div>
+                                          <div class="field">
+                                              <label for="company_url">URL</label>
+                                              {{ profile_form.company_url}}
+                                          </div>
+                                          <div class="field">
+                                              <label for="company_name">Company</label>
+                                              {{ profile_form.company_name}}
+                                          </div>
+                                      </div>
+                                    <ul class="actions">
+                                        <li><a href="" class="button submit">Register</a></li>
+                                    </ul>
+                                    </form>
+                      {% endif %}
+                {% endif %}
+        </section>
+{% endblock %}

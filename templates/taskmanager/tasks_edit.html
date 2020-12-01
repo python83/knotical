@@ -1,0 +1,65 @@
+<!-- Add a task -->
+{% extends "interface/base.html" %}
+{% block body_block %}
+  <section id="three" class="wrapper style1 fade-up">
+    <div class="inner">
+      <h1>Edit Knots</h1>
+    </div>
+  </section>
+
+  <!-- if user is authenticated -->
+  {% if user.is_authenticated %}
+
+               <!-- if record not found -->
+               {% if record_not_found %}
+                 <section id="main" class="wrapper">
+                   <div class="inner">
+                               <h3>Unable to find knot!</h3>
+                     </div>
+                 </section>
+
+               <!-- if record  found -->
+               {% else %}
+                          <!-- was a topic created? -->
+                          <!-- {% if knot_updated %}
+                          <section id="main" class="wrapper">
+                    				<div class="inner">
+                                        <h3>You retied a knot!</h3>
+                              </div>
+                          </section>
+                          {% endif %} -->
+
+                          <!-- section to add knot -->
+                          <section class="wrapper style2 spotlights">
+                            <section>
+                              <div class="content">
+                                <div class="inner">
+                                      <!-- add topic form -->
+                                      <form enctype="multipart/form-data" method="POST">
+                                        {% csrf_token %}
+                                        <!--  keep it simple and use the available tag to display a form -->
+                                        {{ edit_knot_form.as_p }}
+                                        <input type="hidden" name="knot_to_save" id = "knot_to_save" value="{{ edit_knot_form.knot_title.value}}">
+                                        <a href="#" class="button submit icon solid fa-save">Retie Knot</a>
+                                      </form>
+                                </div>
+                              </div>
+                            </section>
+                          </section>
+                {% endif %}
+
+
+<!-- if not authenticated -->
+    {% else %}
+        <section class="wrapper style2 spotlights">
+          <section>
+            <div class="content">
+              <div class="inner">
+                <h3>Please login to access this page!</h3>
+              </div>
+            </div>
+          </section>
+        </section>
+  {% endif %}
+
+{% endblock %}
